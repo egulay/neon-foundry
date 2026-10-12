@@ -5,10 +5,6 @@ cast of [gulay.io](https://gulay.io) — nine workers, a flying saucer, a black
 cat, a lamb, a devil, a snake and a handful of beetles — with gradient window
 borders, six wallpapers, and four animated unlock screens.
 
-The typography and the captions take their cue from
-[Marathon](https://marathonthegame.com/); the characters and the coloured
-snowflake are from the site and are its author's own.
-
 ![Neon Foundry](preview.png)
 
 ## Install
@@ -143,6 +139,12 @@ scene ever fails to load, the lock screen still comes up with its field.
 Scenes stop animating when the panel blanks (`active: root.loadBackground`), so
 nothing drives the GPU while the machine sits locked overnight.
 
+If you edit a scene by hand, run `omarchy restart shell` afterwards. Saving a
+file under `~/.config/omarchy/plugins/` reloads the plugin's service code, but
+the `LockView` the shell already built stays cached: the lock screen goes on
+rendering the previous view and reports no error at all. `install.sh` restarts
+the shell for this reason.
+
 If Omarchy's own `LockView.qml` gains features, re-clone it and re-apply that
 one block rather than keeping this copy frozen.
 
@@ -173,5 +175,4 @@ would win over a template that gets fixed upstream.
 ## Credit
 
 Palette, characters and the coloured snowflake: the hero canvas of
-[gulay.io](https://gulay.io). Captions and type treatment influenced by
-Marathon. Built for Omarchy.
+[gulay.io](https://gulay.io). Built for Omarchy.

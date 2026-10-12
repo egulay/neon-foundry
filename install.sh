@@ -85,8 +85,13 @@ if ((install_lock)); then
     done
     say "Installed the Neon Foundry unlock screens into $lock_dir"
 
-    # Plugin code reloads on save, but nudge it in case the watcher missed it.
+    # A rescan reloads the plugin's service code, but the LockView component
+    # the shell already instantiated stays cached — the lock screen keeps
+    # rendering the stock view, with no error to show for it. Only a restart
+    # picks the new view up.
     omarchy-shell shell rescanPlugins >/dev/null 2>&1 || true
+    say "Restarting the shell so the new lock view is picked up"
+    omarchy restart shell >/dev/null 2>&1 || true
   fi
 fi
 
