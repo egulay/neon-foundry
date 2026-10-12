@@ -100,7 +100,7 @@ lays the captions on afterwards.
 
 ## Unlock screens
 
-![Unlock](preview-unlock.png)
+![Unlock](preview-lock.png)
 
 Four scenes, drawn at random each time the screen locks:
 
@@ -156,6 +156,36 @@ the shell for this reason.
 If Omarchy's own `LockView.qml` gains features, re-clone it and re-apply that
 one block rather than keeping this copy frozen.
 
+## Boot and login screen
+
+Separate from the lock screen above: Omarchy's Plymouth boot splash and its
+SDDM login screen are set from a theme by
+
+```bash
+omarchy plymouth switcher        # pick a theme's boot/login screen
+```
+
+which needs two files, and fails with `Logo file not found` without the first:
+
+| File | What it is |
+|------|-----------|
+| `unlock.png` | the mark, centred above the password entry. Copied to both themes as `logo.png` and **not** recoloured, so it keeps its colours. Must be a real file, never a symlink. |
+| `preview-unlock.png` | a 1920x1080 mock of that screen; its presence is what lists the theme in the switcher. |
+
+Both are generated from the lattice — the one piece of this theme's art that
+carries no text:
+
+```bash
+python3 -I tools/gen_logo.py [--seed N]
+```
+
+The background and entry colours are not stored in either file: Omarchy reads
+`background` and `foreground` straight out of `colors.toml` when it applies
+them.
+
+Note that `preview-unlock.png` previews the *boot* screen. The Quickshell lock
+screen's own preview is `preview-lock.png`.
+
 ## Layout
 
 ```
@@ -165,7 +195,9 @@ icons.theme          Yaru-olive
 chromium.theme       6,7,9
 backgrounds/         six wallpapers
 preview.png          theme picker
-preview-unlock.png   lock screen preview
+unlock.png           boot/login mark (Plymouth + SDDM)
+preview-unlock.png   boot/login screen preview
+preview-lock.png     lock screen preview
 lock/                the unlock screens
   LockView.qml       stock view + one Neon Foundry block
   FoundryScene.qml   picks a scene at random
@@ -173,7 +205,7 @@ lock/                the unlock screens
   FoundryGrid.qml    the grid they move on
   FoundrySprites.js  every sprite matrix, from the site
   Scene*.qml         the four scenes
-tools/               wallpaper generator
+tools/               wallpaper and login-asset generators
 ```
 
 `btop.theme`, `neovim.lua`, the terminal configs and the rest are not shipped
