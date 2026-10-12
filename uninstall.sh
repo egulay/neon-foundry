@@ -29,8 +29,12 @@ fi
 lock_dir="$PLUGINS_DIR/$LOCK_ID"
 if [[ -d $lock_dir ]]; then
   if ((remove_clone)); then
-    rm -rf "$lock_dir"
-    say "Removed $lock_dir — the built-in omarchy.lock takes over again"
+    # Go through omarchy rather than rm -rf: cloning recorded a
+    # cloneSourceRestores entry and disabled omarchy.lock, and only the
+    # supported removal re-enables it. Deleting the directory by hand leaves
+    # the built-in disabled and the session with no lock screen at all.
+    omarchy plugin remove "$LOCK_ID" --yes
+    say "Removed $LOCK_ID — the built-in omarchy.lock takes over again"
   elif [[ -f $lock_dir/LockView.qml.orig ]]; then
     mv "$lock_dir/LockView.qml.orig" "$lock_dir/LockView.qml"
     rm -f "$lock_dir"/{FoundryPixel.qml,FoundryGrid.qml,FoundryScene.qml,FoundrySprites.js} \
