@@ -1,0 +1,58 @@
+mode = "dark"
+
+# Neon Foundry — the palette of gulay.io.
+#
+# The six foundational colours are the site's CSS custom properties, converted
+# from oklch to sRGB. The accents are the five colours its pixel-art sprites
+# are painted in, plus the cat's gold and the devil's red.
+#
+#   --bg        oklch(0.13 0.005 260)  ->  #060709
+#   --bg-raised oklch(0.17 0.006 260)  ->  #0e0f12
+#   --fg        oklch(0.94 0.008 90)   ->  #edebe5
+#   --fg-muted  oklch(0.66 0.01 260)   ->  #8f9298
+#   --line      oklch(0.28 0.008 260)  ->  #27292d
+#   --accent    oklch(0.90 0.24 125)   ->  #baf700   (acid green)
+#   --link      oklch(0.85 0.13 200)   ->  #44e7ef   (cyan)
+
+accent = "#baf700"
+selection = "#27292d"
+muted = "#8f9298"
+
+background = "#060709"
+dark_background = "#030405"
+darker_background = "#000000"
+lighter_background = "#0e0f12"
+
+foreground = "#edebe5"
+dark_foreground = "#8f9298"
+light_foreground = "#cfcec9"
+bright_foreground = "#f7f5ef"
+
+# Gradient borders. Three stops through the sprite palette — acid green, cyan,
+# magenta — on a 45-degree sweep. Declaring them here rather than in
+# hyprland.lua is deliberate: Omarchy drops a cloned theme's .lua files and
+# regenerates them from colors.toml, so this is the form that survives
+# `omarchy theme install`. The same value feeds the shell, which is what puts
+# the gradient on the lock screen's password field and the bar's popups.
+hyprland_active_border = "rgba(c8ff00ee) rgba(31e5ffee) rgba(ff2e8bee) 45deg"
+hyprland_inactive_border = "rgba(27292daa) rgba(0e0f12aa) 45deg"
+active_border_color = "#c8ff00"
+active_tab_background = "#1a1d20"
+
+# Terminal colours. Sprite palette first: acid green, orange, cyan, magenta,
+# cream. Red is the devil's, yellow the cat's halo gold, blue the lamb's aura.
+red = "#ff3b3b"
+orange = "#ff5a1f"
+yellow = "#f2c14e"
+green = "#c8ff00"
+cyan = "#31e5ff"
+blue = "#5cc8ff"
+magenta = "#ff2e8b"
+brown = "#8a4a2c"
+
+bright_red = "#ff6b6b"
+bright_yellow = "#ffd97a"
+bright_green = "#d9ff4d"
+bright_cyan = "#7af0ff"
+bright_blue = "#a8ecff"
+bright_magenta = "#ff6bb0"
