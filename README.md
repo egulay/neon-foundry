@@ -63,8 +63,9 @@ the shell, which is what puts the gradient on the bar's popups and on the lock
 screen's password field.
 
 `hyprland.lua` is still here for the linked install, where it is kept. It adds
-only what the template cannot express: an acid-green glow under the focused
-window.
+only what the template cannot express: a glow under the focused window, carrying
+the same three stops on the same 45-degree sweep as the border, so the corner
+that is magenta on the border is magenta underneath it too.
 
 ## Wallpapers
 

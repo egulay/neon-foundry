@@ -18,7 +18,13 @@ local inactive_border_color = {
   colors = { "rgba(27292daa)", "rgba(0e0f12aa)" },
   angle = 45,
 }
-local active_shadow_color = "rgba(c8ff0033)"
+-- The glow carries the same three stops on the same 45-degree sweep as the
+-- border, so the corner that is magenta on the border is magenta underneath it
+-- too. A flat accent here clashes: the bottom-right ends up pink over green.
+local active_shadow_color = {
+  colors = { "rgba(c8ff0033)", "rgba(31e5ff33)", "rgba(ff2e8b33)" },
+  angle = 45,
+}
 local inactive_shadow_color = "rgba(06070977)"
 
 hl.config({
