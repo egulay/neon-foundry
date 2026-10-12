@@ -94,6 +94,17 @@ python3 -I tools/gen_backgrounds.py --only 04-lattice
 from the same generator the site uses — one arm, mirrored through the eight
 symmetries of the square.
 
+After regenerating, re-apply the theme:
+
+```bash
+omarchy theme set neon-foundry
+```
+
+`omarchy theme set` copies the theme into `~/.local/state/omarchy/current/theme/`
+and the desktop reads from that copy, not from this directory. Linking the theme
+keeps `colors.toml` and the lock screen's QML live, but a regenerated wallpaper
+sits in the repo unseen until the theme is applied again.
+
 `tools/` has no third-party dependencies: `canvas.py` is a small RGB buffer and
 a PNG writer, because Pillow is not installed on a stock Omarchy box and every
 shape here is an axis-aligned fill. ImageMagick, which Omarchy already ships,
