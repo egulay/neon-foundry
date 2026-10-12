@@ -136,8 +136,16 @@ byte-identical to Omarchy's. Authentication is not somewhere to be clever for
 the sake of a wallpaper. The scene loader also swallows its own errors: if a
 scene ever fails to load, the lock screen still comes up with its field.
 
-Scenes stop animating when the panel blanks (`active: root.loadBackground`), so
-nothing drives the GPU while the machine sits locked overnight.
+The scene is only built while the lock is actually up
+(`active: root.loadBackground`, which the service binds to `locked`).
+
+It does **not** stop when the display blanks. Omarchy turns the backlight off
+five seconds after locking (`idleBlankTimer` in `Service.qml`, which runs
+`omarchy-brightness-display off`), but that only darkens the panel — the
+compositor carries on, and so do these animations. The cost is a few dozen
+animated rectangles, not a repainting canvas, so it is small; it is not zero.
+To make the blank delay longer, raise that `interval` in your own clone's
+`Service.qml` — at the price of diverging from the stock service.
 
 If you edit a scene by hand, run `omarchy restart shell` afterwards. Saving a
 file under `~/.config/omarchy/plugins/` reloads the plugin's service code, but
