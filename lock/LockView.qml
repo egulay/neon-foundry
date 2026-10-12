@@ -154,6 +154,44 @@ Item {
     }
     // --- /Neon Foundry -----------------------------------------------------
 
+    // The same glow the focused window gets from hyprland.lua, under the
+    // password field. Hyprland's shadow cannot reach here — the lock screen is
+    // a Quickshell surface, not a window it manages — so it is drawn: a rect
+    // carrying the border's three stops, blurred behind the field. It sits
+    // above the scene and below the field, so the characters never cross it.
+    Item {
+      anchors.centerIn: parent
+      width: root.fieldWidth + 96
+      height: root.fieldHeight + 96
+
+      Rectangle {
+        id: fieldGlowSource
+        anchors.fill: parent
+        anchors.margins: 48
+        radius: Style.cornerRadius
+        visible: false          // only ever shown through the blur below
+        gradient: Gradient {
+          orientation: Gradient.Horizontal
+          GradientStop { position: 0.0; color: "#c8ff00" }
+          GradientStop { position: 0.5; color: "#31e5ff" }
+          GradientStop { position: 1.0; color: "#ff2e8b" }
+        }
+      }
+
+      MultiEffect {
+        anchors.fill: fieldGlowSource
+        source: fieldGlowSource
+        autoPaddingEnabled: true
+        paddingRect: Qt.rect(-48, -48, fieldGlowSource.width + 96, fieldGlowSource.height + 96)
+        blurEnabled: true
+        blur: 1.0
+        blurMax: 48
+        blurMultiplier: 1.0
+        opacity: 0.45
+      }
+    }
+
+
     MouseArea {
       anchors.fill: parent
       hoverEnabled: true

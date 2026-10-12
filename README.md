@@ -112,7 +112,11 @@ Four scenes, drawn at random each time the screen locks:
 | 2 | **Menagerie** — the cat crossing and settling, the lamb grazing, the devil ambling |
 | 3 | **Patrol** — the snake working the grid, a wormhole turning at either end |
 
-No logo, no clock, no user card — just the password field, as asked for. To pin
+No logo, no clock, no user card — just the password field, as asked for. The
+field carries the same gradient glow as a focused window. Hyprland's shadow
+cannot reach it — the lock screen is a Quickshell surface, not a window it
+manages — so `LockView.qml` draws it: the border's three stops on a blurred
+rect behind the field. To pin
 one scene instead of a random draw, set `variant` on the `FoundryScene` in
 `~/.config/omarchy/plugins/<user>.lock/LockView.qml`:
 
