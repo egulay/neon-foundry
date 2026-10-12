@@ -180,6 +180,17 @@ tools/               wallpaper generator
 on purpose: Omarchy generates them from `colors.toml`, and a file shipped here
 would win over a template that gets fixed upstream.
 
+## Licence
+
+MIT — see [LICENSE](LICENSE).
+
+`lock/LockView.qml` is a derivative of the `LockView.qml` that ships with
+[Omarchy](https://github.com/basecamp/omarchy) (MIT, Copyright (c) David
+Heinemeier Hansson). Most of that one file is Omarchy's; the Neon Foundry
+change is the block marked inside it. Its licence is reproduced in `LICENSE`
+under THIRD-PARTY NOTICES. Everything else here — the palette, the sprite
+data, the wallpaper generator, the scenes — is this repository's own.
+
 ## Credit
 
 Palette, characters and the coloured snowflake: the hero canvas of

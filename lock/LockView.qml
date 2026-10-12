@@ -1,5 +1,10 @@
 // Neon Foundry lock screen.
 //
+// Copyright (c) David Heinemeier Hansson — MIT. Most of this file is the
+// LockView.qml that ships with Omarchy (https://github.com/basecamp/omarchy);
+// the full licence is in LICENSE at the root of this repository, and it
+// travels with this file. The Neon Foundry changes are the block marked below.
+//
 // Derived from Omarchy's built-in omarchy.lock LockView.qml. The only changes
 // are the block marked "Neon Foundry" below; the password field, the PAM
 // flows in Service.qml and the fingerprint handling are stock, deliberately —
