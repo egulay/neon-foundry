@@ -213,37 +213,108 @@ def scene_lattice(c, rng):
              S.worker_colors(S.PALETTE[0], S.PALETTE[3]), W_PX)
 
 
+def _chaikin(points, iterations=3):
+    """Round the corners of a polyline (Chaikin). The site's snake turns at
+    right angles because it is pinned to the grid and only 14 segments long; at
+    wallpaper scale those corners read as a circuit trace, so they get eased."""
+    for _ in range(iterations):
+        out = [points[0]]
+        for (x0, y0), (x1, y1) in zip(points, points[1:]):
+            out.append((x0 * 0.75 + x1 * 0.25, y0 * 0.75 + y1 * 0.25))
+            out.append((x0 * 0.25 + x1 * 0.75, y0 * 0.25 + y1 * 0.75))
+        out.append(points[-1])
+        points = out
+    return points
+
+
+def _resample(points, spacing):
+    """Even points along a polyline, so the body is continuous rather than a
+    dotted line: segments overlap instead of leaving a gap at every step."""
+    out = [points[0]]
+    carry = 0.0
+    for (x0, y0), (x1, y1) in zip(points, points[1:]):
+        seg = ((x1 - x0) ** 2 + (y1 - y0) ** 2) ** 0.5
+        if seg <= 0:
+            continue
+        t = carry
+        while t < seg:
+            f = t / seg
+            out.append((x0 + (x1 - x0) * f, y0 + (y1 - y0) * f))
+            t += spacing
+        carry = t - seg
+    out.append(points[-1])
+    return out
+
+
 def scene_patrol(c, rng):
-    """The snake working the lines end to end, a wormhole open at either end."""
+    """The snake, full length, winding across the frame out of a wormhole.
+
+    A redesign rather than the site's scene: on the site the snake is pinned to
+    the grid and fourteen segments long, which at 2880px reads as a dotted
+    circuit trace rather than a creature. Here it keeps everything that makes
+    it the site's snake — the two alternating greens, the width falling away to
+    the tail, the wider head with eyes on the leading side and a forked tongue —
+    but follows a smoothed curve and is sampled densely enough to be solid.
+    """
     w, h = c.w, c.h
-    start = (snap(w * 0.10), snap(h * 0.34))
-    x, y = start
-    body = [(x, y)]
-    # A serpentine that turns only on grid lines, sweeping the whole frame.
-    legs = [(1, 0, 26), (0, 1, 9), (1, 0, 22), (0, -1, 7), (1, 0, 20),
-            (0, 1, 12), (1, 0, 24), (0, 1, 8), (1, 0, 18)]
-    for dx, dy, count in legs:
-        for _ in range(count):
-            x += dx * SNAKE
-            y += dy * SNAKE
-            body.append((x, y))
+
+    # A winding path rising left to right, as fractions of the frame.
+    control = [(0.07, 0.56), (0.19, 0.72), (0.33, 0.67), (0.44, 0.47),
+               (0.56, 0.34), (0.69, 0.35), (0.80, 0.27)]
+    coarse = [(fx * w, fy * h) for fx, fy in control]
+
+    # Neck width in pixels, stated outright rather than derived from the
+    # grid step: this is a drawn creature, not a grid walker, and tying it
+    # to the step is what left it 25px wide on a 2880px canvas.
+    girth = 78
+    body = _resample(_chaikin(coarse, 4), girth * 0.18)
+    body.reverse()                      # index 0 is the head, as on the site
     n = len(body)
-    for i, (bx, by) in enumerate(body):
-        taper = 0.45 + 0.55 * (i / n)
-        col = "#8fbf00" if i % 2 else S.PALETTE[0]
-        c.rect(bx, by, SNAKE - 2, SNAKE - 2, col, taper)
-    hx, hy = body[-1]
-    c.rect(hx, hy, SNAKE - 2, SNAKE - 2, S.PALETTE[0])
-    c.rect(hx + SNAKE // 2 + 2, hy + 5, 6, 6, S.BG)             # eye
-    c.rect(hx + SNAKE, hy + SNAKE // 2 - 1, 16, 5, "#ff2e8b")   # tongue
-    c.disc(hx, hy, 170, S.PALETTE[0], 0.11)
 
-    c.wormhole(start[0], start[1] + SNAKE // 2, 7.5, rng)
-    c.wormhole(snap(w * 0.93), snap(h * 0.72), 6.0, rng)
+    # Tail first, so each blob is overlapped by the thicker one ahead of it.
+    for i in range(n - 1, 0, -1):
+        bx, by = body[i]
+        taper = 1 - (i / max(1, n - 1)) * 0.68   # full at the neck, thin at the tip
+        size = max(3, round(girth * taper))
+        # Scales band along the body; alternating per sample at this density
+        # would just read as noise.
+        col = "#8fbf00" if (i // 4) % 2 else S.PALETTE[0]
+        c.rect(bx - size / 2, by - size / 2, size, size, col)
 
-    # Beetles keeping well clear of it.
+    # Head: a little wider than the neck.
+    hx, hy = body[0]
+    hs = round(girth * 1.15)
+    c.rect(hx - hs / 2, hy - hs / 2, hs, hs, S.PALETTE[0])
+
+    # Facing, averaged over a few samples so the curve does not throw it.
+    ahead = body[min(8, n - 1)]
+    vx, vy = hx - ahead[0], hy - ahead[1]
+    mag = max(1e-6, (vx * vx + vy * vy) ** 0.5)
+    dx, dy = vx / mag, vy / mag
+    px_, py_ = -dy, dx
+    k = girth / 8.0
+    eye = max(3, round(2.0 * k))
+
+    for side in (1, -1):
+        c.rect(hx + dx * 1.5 * k + px_ * side * 2.2 * k - eye / 2,
+               hy + dy * 1.5 * k + py_ * side * 2.2 * k - eye / 2,
+               eye, eye, "#121215")
+
+    tx, ty = hx + dx * (hs / 2 + k * 0.4), hy + dy * (hs / 2 + k * 0.4)
+    c.rect(tx - eye / 2, ty - eye / 2, eye, eye, "#ff2e8b")
+    for fork in (1, -1):
+        c.rect(tx + dx * 2.4 * k + px_ * fork * 1.7 * k - eye / 2,
+               ty + dy * 2.4 * k + py_ * fork * 1.7 * k - eye / 2,
+               eye, eye, "#ff2e8b")
+
+    c.disc(hx, hy, 300, S.PALETTE[0], 0.09)
+
+    # The hole the tail is still coming out of.
+    c.wormhole(coarse[0][0], coarse[0][1], 10.0, rng)
+
+    # Beetles getting out of the way, well clear of the caption.
     for i in range(3):
-        c.sprite(S.BUG_RUN[i % 3], snap(w * (0.40 + 0.18 * i)), snap(h * 0.88),
+        c.sprite(S.BUG_RUN[i % 3], snap(w * (0.46 + 0.17 * i)), snap(h * 0.86),
                  S.bug_colors(S.PALETTE[(i + 1) % len(S.PALETTE)]), B_PX, flip=(i == 1))
 
 

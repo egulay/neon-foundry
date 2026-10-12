@@ -78,7 +78,7 @@ Six, in `backgrounds/`, generated at 2880×1800. Cycle with
 | `02-abduction.png` | The saucer has a beetle off the ground; the rest scatter |
 | `03-crew.png` | All nine, mid-shift, across three lanes |
 | `04-lattice.png` | The finished snowflake, centred and lit |
-| `05-patrol.png` | The snake working the lines, a wormhole open at either end |
+| `05-patrol.png` | The snake winding across the frame, out of an open wormhole |
 | `06-off-shift.png` | The cat, the lamb and the devil, each in their own light |
 
 They are generated, not hand-drawn — `tools/gen_backgrounds.py` renders the
