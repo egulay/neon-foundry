@@ -1,9 +1,9 @@
 # Neon Foundry
 
-An [Omarchy](https://omarchy.org/) theme built from the palette and the pixel-art
-cast of [gulay.io](https://gulay.io) — nine workers, a flying saucer, a black
-cat, a lamb, a devil, a snake and a handful of beetles — with gradient window
-borders, six wallpapers, and four animated unlock screens.
+An [Omarchy](https://omarchy.org/) theme with a pixel-art cast — nine workers,
+a flying saucer, a black cat, a lamb, a devil, a snake and a handful of
+beetles — gradient window borders, six wallpapers, and four animated unlock
+screens.
 
 ![Neon Foundry](preview.png)
 
@@ -30,11 +30,11 @@ switching). `./uninstall.sh` reverses it and restores the stock unlock screen.
 
 ## The palette
 
-The six foundational colours are the site's CSS custom properties, converted
-from oklch to sRGB. The accents are the colours its sprites are painted in.
+Six foundational colours, authored in oklch and converted to sRGB. The accents
+are the colours the sprites are painted in.
 
-| Role | Site token | Hex |
-|------|-----------|-----|
+| Role | Token | Hex |
+|------|-------|-----|
 | Background | `--bg` | `#060709` |
 | Raised background | `--bg-raised` | `#0e0f12` |
 | Foreground | `--fg` | `#edebe5` |
@@ -82,7 +82,7 @@ Six, in `backgrounds/`, generated at 2880×1800. Cycle with
 | `06-off-shift.png` | The cat, the lamb and the devil, each in their own light |
 
 They are generated, not hand-drawn — `tools/gen_backgrounds.py` renders the
-same sprite matrices the site animates:
+sprite matrices directly:
 
 ```bash
 python3 -I tools/gen_backgrounds.py                 # all six, native size
@@ -90,9 +90,8 @@ python3 -I tools/gen_backgrounds.py --size 3840x2160 --seed 7
 python3 -I tools/gen_backgrounds.py --only 04-lattice
 ```
 
-`--seed` changes the snowflake and the scatter; every flake is a fresh draw
-from the same generator the site uses — one arm, mirrored through the eight
-symmetries of the square.
+`--seed` changes the snowflake and the scatter; every flake is a fresh draw —
+one arm, mirrored through the eight symmetries of the square.
 
 After regenerating, re-apply the theme:
 
@@ -219,7 +218,7 @@ lock/                the unlock screens
   FoundryScene.qml   picks a scene at random
   FoundryPixel.qml   one pixel-art character
   FoundryGrid.qml    the grid they move on
-  FoundrySprites.js  every sprite matrix, from the site
+  FoundrySprites.js  every sprite matrix, and the curve helpers
   Scene*.qml         the four scenes
 tools/               wallpaper and login-asset generators
 ```
@@ -241,5 +240,4 @@ data, the wallpaper generator, the scenes — is this repository's own.
 
 ## Credit
 
-Palette, characters and the coloured snowflake: the hero canvas of
-[gulay.io](https://gulay.io). Built for Omarchy.
+Built for Omarchy.
