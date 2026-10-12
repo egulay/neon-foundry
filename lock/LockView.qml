@@ -156,20 +156,26 @@ Item {
 
     // The same glow the focused window gets from hyprland.lua, under the
     // password field. Hyprland's shadow cannot reach here — the lock screen is
-    // a Quickshell surface, not a window it manages — so it is drawn: a rect
-    // carrying the border's three stops, blurred behind the field. It sits
-    // above the scene and below the field, so the characters never cross it.
+    // a Quickshell surface, not a window it manages — so it is drawn.
+    //
+    // Two things this has to get right. It is a RIM, not a slab: blurring a
+    // filled rectangle makes a glowing panel, and the field's background is
+    // only 80% opaque, so that panel shows through it as a pale box — the mask
+    // takes the field's own footprint back out. And the effect is exactly the
+    // size of its source, because MultiEffect scales the source to its own
+    // geometry; making it larger to leave room for the blur stretches the glow
+    // into a curtain instead. autoPaddingEnabled lets the blur spill past the
+    // edges without resizing anything.
     Item {
       anchors.centerIn: parent
-      width: root.fieldWidth + 96
-      height: root.fieldHeight + 96
+      width: root.fieldWidth
+      height: root.fieldHeight
 
       Rectangle {
         id: fieldGlowSource
         anchors.fill: parent
-        anchors.margins: 48
         radius: Style.cornerRadius
-        visible: false          // only ever shown through the blur below
+        visible: false              // only ever seen through the effect below
         gradient: Gradient {
           orientation: Gradient.Horizontal
           GradientStop { position: 0.0; color: "#c8ff00" }
@@ -178,19 +184,27 @@ Item {
         }
       }
 
+      Rectangle {
+        id: fieldGlowMask
+        anchors.fill: parent
+        radius: Style.cornerRadius
+        visible: false
+        color: "white"
+      }
+
       MultiEffect {
-        anchors.fill: fieldGlowSource
+        anchors.fill: parent
         source: fieldGlowSource
         autoPaddingEnabled: true
-        paddingRect: Qt.rect(-48, -48, fieldGlowSource.width + 96, fieldGlowSource.height + 96)
         blurEnabled: true
         blur: 1.0
-        blurMax: 48
-        blurMultiplier: 1.0
-        opacity: 0.45
+        blurMax: 32
+        maskEnabled: true
+        maskSource: fieldGlowMask
+        maskInverted: true
+        opacity: 0.6
       }
     }
-
 
     MouseArea {
       anchors.fill: parent
