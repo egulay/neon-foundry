@@ -145,3 +145,48 @@ function workerWalkFrames(kind) {
   for (var s = 0; s < 4; s++) out.push(workerFrame(kind, s, true, false, false))
   return out
 }
+
+// --- curve helpers ---------------------------------------------------------
+// The same two steps tools/gen_backgrounds.py uses to draw the snake on the
+// wallpapers. The site pins its snake to the grid and runs it fourteen
+// segments long, which works at 8px; at panel scale that reads as a dotted
+// circuit trace, so the path is eased and then sampled densely enough that
+// the body comes out solid.
+
+/** Round the corners of a polyline (Chaikin). */
+function chaikin(points, iterations) {
+  iterations = iterations === undefined ? 3 : iterations
+  for (var it = 0; it < iterations; it++) {
+    var out = [points[0]]
+    for (var i = 0; i < points.length - 1; i++) {
+      var a = points[i], b = points[i + 1]
+      out.push({ x: a.x * 0.75 + b.x * 0.25, y: a.y * 0.75 + b.y * 0.25 })
+      out.push({ x: a.x * 0.25 + b.x * 0.75, y: a.y * 0.25 + b.y * 0.75 })
+    }
+    out.push(points[points.length - 1])
+    points = out
+  }
+  return points
+}
+
+/** Evenly spaced points along a polyline, so body segments overlap. */
+function resample(points, spacing) {
+  if (!points.length) return []
+  var out = [points[0]]
+  var carry = 0
+  for (var i = 0; i < points.length - 1; i++) {
+    var a = points[i], b = points[i + 1]
+    var dx = b.x - a.x, dy = b.y - a.y
+    var seg = Math.sqrt(dx * dx + dy * dy)
+    if (seg <= 0) continue
+    var t = carry
+    while (t < seg) {
+      var f = t / seg
+      out.push({ x: a.x + dx * f, y: a.y + dy * f })
+      t += spacing
+    }
+    carry = t - seg
+  }
+  out.push(points[points.length - 1])
+  return out
+}
