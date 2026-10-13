@@ -19,6 +19,7 @@ leave alone, each optional and each covered below.
 | **Four animated unlock screens** | the characters move behind the password field — a work crew, a saucer abducting a beetle, a cat and lamb and devil, a snake out of a wormhole. One at random per lock. Needs `install.sh`. |
 | **Boot and login screen** | the lattice on the Plymouth splash and the SDDM greeter, via `omarchy plymouth switcher`. |
 | **GTK apps that match** | Nautilus and friends on the theme's background, in the bar's font, with smaller icons. Two scripts in `tools/`, one installable as a hook so it follows every theme. |
+| **Browsers** | Chromium, Chrome and Brave are themed by Omarchy already; `tools/firefox-theme.sh` builds the equivalent for Firefox, Zen, LibreWolf and Floorp. |
 
 The unlock screens and the GTK scripts are **not** theme content — Omarchy has
 no way for a theme to deliver either. They live here so they are reproducible,
@@ -227,6 +228,55 @@ them.
 Note that `preview-unlock.png` previews the *boot* screen. The Quickshell lock
 screen's own preview is `preview-lock.png`.
 
+## Browsers
+
+**Chromium, Chrome and Brave need nothing.** Omarchy themes them itself:
+`omarchy-theme-set-browser` reads this theme's `chromium.theme` and writes
+`BrowserThemeColor` into each browser's managed-policy directory, then
+refreshes anything that is running. It happens on every theme change.
+
+```bash
+$ grep -o '"BrowserThemeColor"[^,}]*' /etc/chromium/policies/managed/*.json
+"BrowserThemeColor": "#060709"
+```
+
+**The Firefox family has no such hook**, so there is a generator for it:
+
+```bash
+./tools/firefox-theme.sh      # -> dist/<theme>-firefox.xpi
+```
+
+One file covers Firefox, Zen, LibreWolf, Floorp and Waterfox, since they share
+Gecko's static-theme API. It reads the *active* theme's `colors.toml`, so it
+works for any Omarchy theme, and picks the text colour that sits on the accent
+by luminance rather than assuming — an acid accent needs dark on it, a dark one
+needs light.
+
+Installing it:
+
+1. Sign it once, free, at
+   [addons.mozilla.org/developers](https://addons.mozilla.org/developers/) —
+   "On your own" distribution. No public listing, and static themes skip the
+   review queue.
+2. Open the signed `.xpi` in the browser and keep it.
+
+To look at it first without installing anything permanently:
+`about:debugging#/runtime/this-firefox` → **Load Temporary Add-on**.
+
+### Why a static theme and not userChrome.css
+
+`theme.colors` is a documented, versioned WebExtension API that names surfaces
+— `frame`, `toolbar`, `popup`, `sidebar`, `ntp_background`. It never reaches
+into the browser's internal CSS, so a chrome refactor in the next release
+cannot quietly break it.
+
+`userChrome.css` does exactly that, and needs
+`toolkit.legacyUserProfileCustomizations.stylesheets` switched on before it
+does anything at all. Zen's own `chrome/zen-themes.css` is likewise off limits
+— it is generated, and says so in its header.
+
+Rebuild after switching themes to follow the new palette.
+
 ## Matching GTK apps to the bar
 
 Omarchy's `omarchy font set` is the *monospace* font: it rewrites the terminals
@@ -289,7 +339,7 @@ lock/                the unlock screens
   FoundryGrid.qml    the grid they move on
   FoundrySprites.js  every sprite matrix, and the curve helpers
   Scene*.qml         the four scenes
-tools/               wallpaper and login-asset generators, GTK matcher
+tools/               wallpaper and login-asset generators, GTK and browser
 ```
 
 `btop.theme`, `neovim.lua`, the terminal configs and the rest are not shipped
