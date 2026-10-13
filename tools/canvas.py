@@ -61,7 +61,7 @@ class Canvas:
                     self.px(x, y, (r, g, b), alpha)
 
     def disc(self, cx, cy, radius, color, alpha=1.0):
-        """Soft radial glow — the site's bloom, cheap: alpha falls off squared."""
+        """Soft radial glow, cheap: alpha falls off squared."""
         if isinstance(color, str):
             color = hex_rgb(color)
         r2 = radius * radius
@@ -80,7 +80,7 @@ class Canvas:
                 self.px(x, y, color, alpha * fall * fall)
 
     def sprite(self, matrix, x, y, colormap, size=1, alpha=1.0, flip=False):
-        """Draw a character matrix. Mirrors the site's `sprite()` helper."""
+        """Draw a character matrix, one rectangle per set pixel."""
         if not matrix:
             return
         width = len(matrix[0])
@@ -97,14 +97,14 @@ class Canvas:
 
     def outlined_sprite(self, matrix, x, y, colormap, outline, size=1,
                         alpha=1.0, flip=False, diagonal=False, outline_px=4):
-        """Halo pass then body pass — how the site keeps the black cat readable.
+        """Halo pass then body pass — what keeps the black cat readable.
 
         The sprite is stamped in a single flat colour at small offsets first
         (four-way for the cat, eight-way for the lamb's aura), then the real
         colours go on top. `outline_px` is in screen pixels, not sprite pixels:
-        the site offsets by 1px against a 2px sprite pixel, i.e. a thin rim, and
-        offsetting by a whole sprite pixel at wallpaper scale would swallow the
-        sprite instead of outlining it.
+        a rim is one or two screen pixels wide, and offsetting by a whole
+        sprite pixel at wallpaper scale would swallow the sprite instead of
+        outlining it.
         """
         offsets = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         if diagonal:

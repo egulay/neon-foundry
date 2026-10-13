@@ -13,7 +13,7 @@ Item {
     readonly property real lane: height * 0.80
     readonly property real laneBack: height * 0.70
 
-    // Nine on the site; five here — the lock screen is not a construction site
+    // Nine in the wallpapers; five here — a lock screen is not a building site
     // and a password field needs quiet around it.
     Repeater {
         model: 5

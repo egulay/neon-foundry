@@ -4,8 +4,8 @@ import QtQuick
 import "FoundrySprites.js" as Sprites
 
 // The faint grid the characters move along, over the blurred wallpaper.
-// The site draws it at 55% opacity in --line; here it sits lower still,
-// because it is competing with a photograph rather than a flat background.
+// The wallpapers draw it at 55% opacity in the line colour; here it sits lower
+// still, because it is competing with a photograph rather than a flat ground.
 Item {
     id: root
     property int cell: 120

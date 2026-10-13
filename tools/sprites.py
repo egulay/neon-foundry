@@ -1,9 +1,7 @@
 """Pixel-art sprite data for the Neon Foundry theme.
 
-Every matrix and colour here is lifted verbatim from the hero canvas of
-gulay.io (`src/lib/components/hero-canvas.svelte`), so the wallpapers and the
-lock screen draw the same characters the site does. Legends are kept as the
-site wrote them; the renderers map letters to colours through COLORS.
+Every matrix and colour the wallpapers and the lock screen draw, so the two
+show the same characters. The renderers map letters to colours through COLORS.
 
 Sprite legends
   workers  '#' body, 'H' hard hat, 'T' tool, 'L' carried load
@@ -15,7 +13,7 @@ Sprite legends
 """
 
 # --- palette ---------------------------------------------------------------
-# The five sprite colours, in the site's order.
+# The five sprite colours, in order.
 PALETTE = ["#c8ff00", "#ff5a1f", "#31e5ff", "#ff2e8b", "#f5f2ea"]
 
 # app.css custom properties, converted from oklch to sRGB hex.
@@ -40,7 +38,7 @@ BUG_HEAD = "#2b2b31"
 BUG_STRIPE = "#121215"
 UFO_HULL = "#a9a9b0"
 
-# Geometry from the site.
+# Geometry.
 CELL = 64  # grid spacing
 PX = 3  # one worker/bug/ufo sprite pixel
 CAT_PX = 2
@@ -157,7 +155,7 @@ def flip_h(matrix):
 
 
 def worker_frame(kind, step, moving=True, working=False, idle_wipe=False):
-    """Assemble one 8-row worker frame the way the site's draw loop does."""
+    """Assemble one 8-row worker frame: torso plus a leg pair."""
     k = KINDS[kind]
     if working:
         return list(k["work"][step % 2]) + list(STAND)
@@ -199,7 +197,7 @@ def _d4(cells):
 
 
 def snowflake(rng, radius=None):
-    """The site's randomised pixel snowflake blueprint.
+    """Randomised pixel snowflake blueprint.
 
     One arm is drawn along +y and one along the diagonal, each a single block
     wide with spurs hanging off it, and both are then mapped through the eight
@@ -233,7 +231,7 @@ def snowflake(rng, radius=None):
 
 
 def flake_colors(cells, rng):
-    """Colour a flake by ring, the way the site tints its blocks: each shell of
+    """Colour a flake by ring: each shell of
     the lattice takes one palette colour so the arms read as banded."""
     out = {}
     for dx, dy in cells:

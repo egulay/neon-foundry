@@ -5,11 +5,10 @@ import "FoundrySprites.js" as Sprites
 
 // The snake crawling out of a wormhole and away across the foot of the screen.
 //
-// Drawn the way the wallpapers draw it rather than the way the site animates
-// it: the site pins its snake to the grid and runs it fourteen segments long,
-// which reads as a dotted circuit trace at panel scale. Here the path is eased
-// and sampled densely, so the body is solid, tapers to the tail, and carries
-// the site's two alternating greens, wider head, eyes and forked tongue.
+// Drawn the way the wallpapers draw it: a snake pinned to the grid and
+// fourteen segments long reads as a dotted circuit trace at panel scale, so the
+// path is eased and sampled densely. The body comes out solid, tapers to the
+// tail, and carries the two alternating greens, wider head, eyes and tongue.
 Item {
     id: root
     anchors.fill: parent
@@ -196,7 +195,7 @@ Item {
         }
     }
 
-    // The tongue flicks rather than hanging out permanently, as on the site.
+    // The tongue flicks rather than hanging out permanently.
     QtObject {
         id: tongue
         property bool out: true

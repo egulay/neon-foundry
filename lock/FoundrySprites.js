@@ -2,10 +2,9 @@
 
 // Pixel-art sprite data for the Neon Foundry lock screen.
 //
-// Lifted verbatim from the hero canvas of gulay.io
-// (src/lib/components/hero-canvas.svelte) so the unlock screen shows the same
-// characters the site does. Legends are kept as the site wrote them; each
-// scene maps letters to colours through the *Colors objects below.
+// The same matrices the wallpaper generator draws from, so the unlock screens
+// and the wallpapers show the same characters. Each scene maps letters to
+// colours through the *Colors objects below.
 
 var PALETTE = ["#c8ff00", "#ff5a1f", "#31e5ff", "#ff2e8b", "#f5f2ea"]
 
@@ -130,7 +129,7 @@ function rot90(m) {
   return out
 }
 
-/** Assemble one 8-row worker frame, as the site's draw loop does. */
+/** Assemble one 8-row worker frame: torso plus a leg pair. */
 function workerFrame(kind, step, moving, working, idleWipe) {
   var k = KINDS[kind % KINDS.length]
   if (working) return k.work[step % 2].concat(STAND)
@@ -148,10 +147,9 @@ function workerWalkFrames(kind) {
 
 // --- curve helpers ---------------------------------------------------------
 // The same two steps tools/gen_backgrounds.py uses to draw the snake on the
-// wallpapers. The site pins its snake to the grid and runs it fourteen
-// segments long, which works at 8px; at panel scale that reads as a dotted
-// circuit trace, so the path is eased and then sampled densely enough that
-// the body comes out solid.
+// wallpapers. A snake pinned to the grid and fourteen segments long works at
+// 8px; at panel scale it reads as a dotted circuit trace, so the path is eased
+// and then sampled densely enough that the body comes out solid.
 
 /** Round the corners of a polyline (Chaikin). */
 function chaikin(points, iterations) {

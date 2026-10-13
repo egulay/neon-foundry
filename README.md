@@ -7,6 +7,24 @@ screens.
 
 ![Neon Foundry](preview.png)
 
+## What it does
+
+A palette and six wallpapers, like any theme — and three things most themes
+leave alone, each optional and each covered below.
+
+| | |
+|---|---|
+| **Palette and gradient borders** | windows, bar, popups and the lock field, all from `colors.toml`. The only part `omarchy theme install` delivers on its own. |
+| **Six wallpapers** | generated, not hand-drawn; reproducible with a seed. |
+| **Four animated unlock screens** | the characters move behind the password field — a work crew, a saucer abducting a beetle, a cat and lamb and devil, a snake out of a wormhole. One at random per lock. Needs `install.sh`. |
+| **Boot and login screen** | the lattice on the Plymouth splash and the SDDM greeter, via `omarchy plymouth switcher`. |
+| **GTK apps that match** | Nautilus and friends on the theme's background, in the bar's font, with smaller icons. Two scripts in `tools/`, one installable as a hook so it follows every theme. |
+
+The unlock screens and the GTK scripts are **not** theme content — Omarchy has
+no way for a theme to deliver either. They live here so they are reproducible,
+and `install.sh` wires up the first. Nothing here is required: the palette
+stands on its own.
+
 ## Install
 
 ```bash

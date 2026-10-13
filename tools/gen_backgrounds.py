@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Generate the Neon Foundry wallpapers.
 
-Six scenes from the gulay.io hero canvas, drawn at native panel resolution.
-Captions are laid on afterwards with ImageMagick (JetBrains Mono, uppercase,
-wide tracking) to match the site's `.label` utility.
+Six scenes drawn at native panel resolution. Captions are laid on afterwards
+with ImageMagick (JetBrains Mono, uppercase, wide tracking).
 
     python3 -I tools/gen_backgrounds.py [--out DIR] [--size WxH] [--seed N]
 """
@@ -25,12 +24,12 @@ CAPTION_FONT_FALLBACK = "JetBrainsMono-NF-Regular"
 
 
 def snap(v, cell=S.CELL):
-    """Put a thing on a grid line — nothing in the site's scene moves off one."""
+    """Put a thing on a grid line — the characters move along them, not between."""
     return int(round(v / cell) * cell)
 
 
 def base(w, h, seed_offset=0):
-    """Dark ground, 1px grid at 55% like the site, then a couple of blooms."""
+    """Dark ground and a 1px grid at 55%."""
     c = Canvas(w, h, S.BG)
     c.grid(120, S.LINE, 0.75)
     return c
@@ -50,7 +49,7 @@ def caption_args(path, w, h, title, subtitle):
 
     return [
         "magick", path,
-        # thin accent rule above the label, as on the site's section headings
+        # thin accent rule above the label
         "-fill", S.ACCENT, "-draw",
         f"rectangle {pad},{h - pad - int(label_pt * 3.2)} {pad + rule_w},{h - pad - int(label_pt * 3.2) + 2}",
         "-font", font,
@@ -63,8 +62,8 @@ def caption_args(path, w, h, title, subtitle):
 
 
 # --- scenes ----------------------------------------------------------------
-# Sprite scales. The site draws at 1x on a 64px CSS grid; a 2880x1800 panel
-# needs roughly six times that before a beetle reads as a beetle.
+# Sprite scales. A 2880x1800 panel needs roughly six times the 1x pixel size
+# before a beetle reads as a beetle.
 W_PX = 16          # workers   -> 80 x 128
 B_PX = 14          # beetles   -> 98 x 70
 U_PX = 20          # saucer    -> 220 x 100
@@ -214,7 +213,7 @@ def scene_lattice(c, rng):
 
 
 def _chaikin(points, iterations=3):
-    """Round the corners of a polyline (Chaikin). The site's snake turns at
+    """Round the corners of a polyline (Chaikin). A grid-walking snake turns at
     right angles because it is pinned to the grid and only 14 segments long; at
     wallpaper scale those corners read as a circuit trace, so they get eased."""
     for _ in range(iterations):
@@ -249,12 +248,11 @@ def _resample(points, spacing):
 def scene_patrol(c, rng):
     """The snake, full length, winding across the frame out of a wormhole.
 
-    A redesign rather than the site's scene: on the site the snake is pinned to
-    the grid and fourteen segments long, which at 2880px reads as a dotted
-    circuit trace rather than a creature. Here it keeps everything that makes
-    it the site's snake — the two alternating greens, the width falling away to
-    the tail, the wider head with eyes on the leading side and a forked tongue —
-    but follows a smoothed curve and is sampled densely enough to be solid.
+    Pinned to the grid and fourteen segments long, a snake reads at 8px and
+    turns into a dotted circuit trace at 2880px. This one keeps what makes it a
+    snake — the two alternating greens, the width falling away to the tail, the
+    wider head with eyes on the leading side and a forked tongue — but follows a
+    smoothed curve and is sampled densely enough to be solid.
     """
     w, h = c.w, c.h
 
@@ -268,7 +266,7 @@ def scene_patrol(c, rng):
     # to the step is what left it 25px wide on a 2880px canvas.
     girth = 78
     body = _resample(_chaikin(coarse, 4), girth * 0.18)
-    body.reverse()                      # index 0 is the head, as on the site
+    body.reverse()                      # index 0 is the head
     n = len(body)
 
     # Tail first, so each blob is overlapped by the thicker one ahead of it.

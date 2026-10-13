@@ -6,8 +6,8 @@ import QtQuick
 //
 // A sprite is a list of equal-length strings; each character either maps to a
 // colour through `colors` or is skipped. `outlinePx` stamps the whole shape in
-// one flat colour at small offsets first, which is how the site keeps the
-// black cat readable against a near-black background — without it the cat is
+// one flat colour at small offsets first, which is what keeps the black cat
+// readable against a near-black background — without it the cat is
 // a hole in the wallpaper.
 //
 // Rectangles rather than a Canvas: the lock screen is composited by the GPU

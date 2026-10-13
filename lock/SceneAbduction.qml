@@ -40,7 +40,7 @@ Item {
             outlineColor: Sprites.BG
         }
 
-        // Running lights cycling through the palette, as on the site.
+        // Running lights cycling through the palette.
         Row {
             y: 3 * root.ufoPx
             Repeater {

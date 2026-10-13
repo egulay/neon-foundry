@@ -1,18 +1,18 @@
 mode = "dark"
 
-# Neon Foundry — the palette of gulay.io.
+# Neon Foundry.
 #
-# The six foundational colours are the site's CSS custom properties, converted
-# from oklch to sRGB. The accents are the five colours its pixel-art sprites
-# are painted in, plus the cat's gold and the devil's red.
+# Six foundational colours, authored in oklch and converted to sRGB. The
+# accents are the five colours the pixel-art sprites are painted in, plus the
+# cat's gold and the devil's red.
 #
-#   --bg        oklch(0.13 0.005 260)  ->  #060709
-#   --bg-raised oklch(0.17 0.006 260)  ->  #0e0f12
-#   --fg        oklch(0.94 0.008 90)   ->  #edebe5
-#   --fg-muted  oklch(0.66 0.01 260)   ->  #8f9298
-#   --line      oklch(0.28 0.008 260)  ->  #27292d
-#   --accent    oklch(0.90 0.24 125)   ->  #baf700   (acid green)
-#   --link      oklch(0.85 0.13 200)   ->  #44e7ef   (cyan)
+#   background         oklch(0.13 0.005 260)  ->  #060709
+#   lighter_background oklch(0.17 0.006 260)  ->  #0e0f12
+#   foreground         oklch(0.94 0.008 90)   ->  #edebe5
+#   dark_foreground    oklch(0.66 0.01 260)   ->  #8f9298
+#   selection          oklch(0.28 0.008 260)  ->  #27292d
+#   accent             oklch(0.90 0.24 125)   ->  #baf700   (acid green)
+#   cyan               oklch(0.85 0.13 200)   ->  #44e7ef
 
 accent = "#baf700"
 selection = "#27292d"

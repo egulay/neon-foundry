@@ -130,7 +130,7 @@ Item {
     // --- Neon Foundry ------------------------------------------------------
     // Everything between these markers is this theme's addition to the stock
     // omarchy.lock view. The password field below is untouched: no logo, no
-    // clock, no user card — just the characters from gulay.io moving behind it.
+    // clock, no user card — just the characters moving behind it.
     //
     // A scrim first, so the sprites read against whichever wallpaper is up and
     // the field keeps the most contrast on screen.

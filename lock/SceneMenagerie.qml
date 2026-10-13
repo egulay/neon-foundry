@@ -101,10 +101,10 @@ Item {
             flip: true  // travelling right to left
             frames: cat.walking ? Sprites.CAT_WALK : Sprites.CAT_SIT
             frameIndex: catStep.value
-            // The site's cat body is #07070a, which disappears entirely once
-            // the wallpaper behind it has been blurred and scrimmed — all that
-            // survives is the gold rim. Lifted just far enough off black to
-            // read as a black cat rather than a wireframe one.
+            // A #07070a cat body disappears entirely once the wallpaper behind
+            // it has been blurred and scrimmed — all that survives is the gold
+            // rim. Lifted just far enough off black to read as a black cat
+            // rather than a wireframe one.
             colors: ({ "#": "#17171d", "T": "#17171d", "E": Sprites.CAT_EYE })
             // The gold rim is what makes a near-black cat visible at all.
             outlinePx: 2
