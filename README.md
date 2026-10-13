@@ -223,7 +223,25 @@ Adwaita Sans while the bar is in JetBrains Mono.
 ```
 
 It follows whatever `omarchy font set` chose, and also drops Nautilus's icon
-and list zoom a step. **This is not theme content** and `omarchy theme install`
+and list zoom a step.
+
+Colours are a second step, because Omarchy does not theme GTK either —
+`omarchy-theme-set-gnome` sets only `color-scheme: prefer-dark` and the icon
+theme, so Nautilus stays Adwaita grey while the bar and the terminals are on
+the theme's background:
+
+```bash
+./tools/gtk-theme-colors.sh --install   # write them, and follow theme changes
+./tools/gtk-theme-colors.sh --revert
+```
+
+`--install` registers it as a `theme-set` hook, so it rewrites itself on every
+theme change and follows **any** theme, not just this one — switch to Tokyo
+Night and Nautilus turns Tokyo Night. It writes libadwaita's named colours into
+`~/.config/gtk-4.0/gtk.css` between markers of its own; Omarchy's Glassy option
+writes to the same file but only between `/* omarchy-glass begin */` and its
+end marker, and removes just that range, so the two coexist and glass can be
+toggled underneath. **This is not theme content** and `omarchy theme install`
 does not carry it: Omarchy has no GTK template, `~/.config/gtk-4.0/` is not
 theme-staged, and a font is a machine preference rather than something a
 palette should decide. It is here so the choice is reproducible elsewhere.
