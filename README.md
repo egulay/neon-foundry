@@ -209,6 +209,31 @@ them.
 Note that `preview-unlock.png` previews the *boot* screen. The Quickshell lock
 screen's own preview is `preview-lock.png`.
 
+## Matching GTK apps to the bar
+
+Omarchy's `omarchy font set` is the *monospace* font: it rewrites the terminals
+and the fontconfig alias the bar follows, and never touches
+`org.gnome.desktop.interface`. So GTK apps — Nautilus above all — stay on
+Adwaita Sans while the bar is in JetBrains Mono.
+
+```bash
+./tools/gtk-match-bar.sh            # same family as the bar, one size down
+./tools/gtk-match-bar.sh --size 11
+./tools/gtk-match-bar.sh --revert   # back to GNOME's defaults
+```
+
+It follows whatever `omarchy font set` chose, and also drops Nautilus's icon
+and list zoom a step. **This is not theme content** and `omarchy theme install`
+does not carry it: Omarchy has no GTK template, `~/.config/gtk-4.0/` is not
+theme-staged, and a font is a machine preference rather than something a
+palette should decide. It is here so the choice is reproducible elsewhere.
+
+Everything it does goes through `gsettings`, deliberately. Omarchy's upcoming
+Glassy windows option works by appending a delimited block to
+`~/.config/gtk-4.0/gtk.css` that imports its own `glass.css` — and it names
+Nautilus as a target. Writing that file here would mean two things editing it;
+going through `gsettings` leaves it alone, so glass and this stack.
+
 ## Layout
 
 ```
@@ -228,7 +253,7 @@ lock/                the unlock screens
   FoundryGrid.qml    the grid they move on
   FoundrySprites.js  every sprite matrix, and the curve helpers
   Scene*.qml         the four scenes
-tools/               wallpaper and login-asset generators
+tools/               wallpaper and login-asset generators, GTK matcher
 ```
 
 `btop.theme`, `neovim.lua`, the terminal configs and the rest are not shipped
