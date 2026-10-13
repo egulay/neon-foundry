@@ -19,7 +19,7 @@ leave alone, each optional and each covered below.
 | **Four animated unlock screens** | the characters move behind the password field — a work crew, a saucer abducting a beetle, a cat and lamb and devil, a snake out of a wormhole. One at random per lock. Needs `install.sh`. |
 | **Boot and login screen** | the lattice on the Plymouth splash and the SDDM greeter, via `omarchy plymouth switcher`. |
 | **GTK apps that match** | Nautilus and friends on the theme's background, in the bar's font, with smaller icons. Two scripts in `tools/`, one installable as a hook so it follows every theme. |
-| **Browsers** | Chromium, Chrome and Brave are themed by Omarchy already; `tools/firefox-theme.sh` builds the equivalent for Firefox, Zen, LibreWolf and Floorp. |
+| **Browsers** | `tools/browser-theme.sh` handles all three families: Chromium and Brave are already automatic, Firefox-likes get a static theme, Zen gets its own colours. |
 
 The unlock screens and the GTK scripts are **not** theme content — Omarchy has
 no way for a theme to deliver either. They live here so they are reproducible,
@@ -230,52 +230,72 @@ screen's own preview is `preview-lock.png`.
 
 ## Browsers
 
-**Chromium, Chrome and Brave need nothing.** Omarchy themes them itself:
-`omarchy-theme-set-browser` reads this theme's `chromium.theme` and writes
-`BrowserThemeColor` into each browser's managed-policy directory, then
-refreshes anything that is running. It happens on every theme change.
+```bash
+./tools/browser-theme.sh            # does what each installed browser needs
+./tools/browser-theme.sh --revert
+```
+
+Three families, three different answers, and only one of them is automatic.
+
+### Chromium, Chrome, Brave — nothing to do
+
+Omarchy themes them itself. `omarchy-theme-set-browser` reads this theme's
+`chromium.theme` and writes `BrowserThemeColor` into each browser's
+managed-policy directory on every theme change, then refreshes whatever is
+running:
 
 ```bash
 $ grep -o '"BrowserThemeColor"[^,}]*' /etc/chromium/policies/managed/*.json
 "BrowserThemeColor": "#060709"
 ```
 
-**The Firefox family has no such hook**, so there is a generator for it:
+### Firefox, LibreWolf, Floorp, Waterfox — a static theme
 
 ```bash
 ./tools/firefox-theme.sh      # -> dist/<theme>-firefox.xpi
 ```
 
-One file covers Firefox, Zen, LibreWolf, Floorp and Waterfox, since they share
-Gecko's static-theme API. It reads the *active* theme's `colors.toml`, so it
-works for any Omarchy theme, and picks the text colour that sits on the accent
-by luminance rather than assuming — an acid accent needs dark on it, a dark one
-needs light.
+One file for all of them, built from the *active* theme's `colors.toml`, so it
+works for any Omarchy theme. `theme.colors` is a documented, versioned
+WebExtension API that names surfaces — `frame`, `toolbar`, `popup`, `sidebar`,
+`ntp_background` — rather than overriding internal CSS, so a chrome refactor in
+the next release cannot quietly break it.
 
-Installing it:
-
-1. Sign it once, free, at
-   [addons.mozilla.org/developers](https://addons.mozilla.org/developers/) —
-   "On your own" distribution. No public listing, and static themes skip the
-   review queue.
-2. Open the signed `.xpi` in the browser and keep it.
-
-To look at it first without installing anything permanently:
+Gecko will not install an unsigned theme permanently. Sign it once, free, at
+[addons.mozilla.org/developers](https://addons.mozilla.org/developers/) under
+"On your own" distribution — no public listing, and static themes skip the
+review queue. To look at it first without installing anything:
 `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on**.
 
-### Why a static theme and not userChrome.css
+### Zen — its own colours, not an add-on
 
-`theme.colors` is a documented, versioned WebExtension API that names surfaces
-— `frame`, `toolbar`, `popup`, `sidebar`, `ntp_background`. It never reaches
-into the browser's internal CSS, so a chrome refactor in the next release
-cannot quietly break it.
+**A Firefox theme will not work in Zen**, and that is deliberate on Zen's part.
+It ships:
 
-`userChrome.css` does exactly that, and needs
-`toolkit.legacyUserProfileCustomizations.stylesheets` switched on before it
-does anything at all. Zen's own `chrome/zen-themes.css` is likewise off limits
-— it is generated, and says so in its header.
+```
+zen.theme.disable-lightweight = true
+```
 
-Rebuild after switching themes to follow the new palette.
+"Lightweight theme" is Gecko's internal name for exactly those static themes.
+Zen turns them off, and its sidebar and borders are its own chrome besides,
+which the `theme.colors` API does not reach even when a theme does load.
+
+Zen's supported route is its own theme colours. `browser-theme.sh` writes two
+prefs into the profile's `user.js` — a file Zen reads at every start and no
+update touches — inside its own markers, leaving anything else in there alone:
+
+```js
+user_pref("zen.theme.gradient.show-custom-colors", true);  // allow a hex code
+user_pref("zen.theme.accent-color", "#baf700");            // the theme's accent
+```
+
+Then restart Zen, right-click the toolbar → **Change Theme Colors**, and enter
+the background and accent the script prints.
+
+Not `userChrome.css`: it needs
+`toolkit.legacyUserProfileCustomizations.stylesheets` switched on and works by
+overriding Zen's internal CSS, so a refactor breaks it silently. Zen's own
+`chrome/zen-themes.css` is generated by ZenMods and says not to edit it.
 
 ## Matching GTK apps to the bar
 
