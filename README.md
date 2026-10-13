@@ -62,10 +62,18 @@ palette is the form that survives `omarchy theme install`. The same value feeds
 the shell, which is what puts the gradient on the bar's popups and on the lock
 screen's password field.
 
-`hyprland.lua` is still here for the linked install, where it is kept. It adds
-only what the template cannot express: a glow under the focused window, carrying
-the same three stops on the same 45-degree sweep as the border, so the corner
-that is magenta on the border is magenta underneath it too.
+`hyprland.lua.example` carries the one thing no template can express: a glow
+under the focused window, with the border's three stops on the same 45-degree
+sweep, so the corner that is magenta on the border is magenta underneath it too.
+
+It ships with the `.example` suffix deliberately. Omarchy drops every `*.lua`
+from a theme installed out of a git clone — a theme's `hyprland.lua` is loaded
+at login, and a theme is not allowed to ship code — so a file named
+`hyprland.lua` here would do nothing for anyone who ran `omarchy theme install`
+while appearing to work for whoever wrote it. `install.sh` copies it into place
+for a linked install, where Omarchy treats the theme as the user's own and does
+load it; that copy is gitignored. **The gradient border does not depend on any
+of this** — it lives in `colors.toml` and reaches every install.
 
 ## Wallpapers
 
@@ -205,7 +213,7 @@ screen's own preview is `preview-lock.png`.
 
 ```
 colors.toml          the palette, and the gradient borders
-hyprland.lua         focused-window glow (linked installs only)
+hyprland.lua.example focused-window glow; install.sh puts it in place
 icons.theme          Yaru-olive
 chromium.theme       6,7,9
 backgrounds/         six wallpapers

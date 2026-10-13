@@ -1,14 +1,17 @@
--- Neon Foundry — Hyprland window chrome.
+-- Neon Foundry — Hyprland window chrome. NOT SHIPPED AS-IS.
 --
--- The gradient is also declared in colors.toml as hyprland_active_border, so it
--- survives `omarchy theme install`: Omarchy drops a cloned theme's .lua files
--- and regenerates this one from the palette. This copy exists for the linked
--- install and adds what the template cannot express — an acid-green glow under
--- the focused window, so focus reads at a glance on a near-black desktop.
+-- Omarchy drops every *.lua from a theme installed out of a git clone, because
+-- a theme's hyprland.lua is loaded at login and a theme is not allowed to ship
+-- code. It regenerates the file from colors.toml instead. So this cannot reach
+-- anyone who runs `omarchy theme install`, and it carries the .example suffix
+-- to say so: staging keeps the file and nothing loads it.
 --
--- Note the shape: hl.config() wants a gradient as a table, not as a Hyprland
--- gradient string. Passing the string form gets "invalid color" at reload and
--- silently leaves the previous theme's borders in place.
+-- install.sh copies it to hyprland.lua for a linked install, where Omarchy
+-- treats the theme as the user's own and does load it. That copy is ignored by
+-- git. The gradient border itself does not depend on any of this — it is
+-- declared in colors.toml as hyprland_active_border and survives either way.
+-- What is here and nowhere else is the glow under the focused window, which
+-- no template can express.
 
 local active_border_color = {
   colors = { "rgba(c8ff00ee)", "rgba(31e5ffee)", "rgba(ff2e8bee)" },

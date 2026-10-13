@@ -8,6 +8,7 @@
 set -euo pipefail
 
 THEME_NAME="neon-foundry"
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 THEMES_DIR="$HOME/.config/omarchy/themes"
 PLUGINS_DIR="$HOME/.config/omarchy/plugins"
 LOCK_ID="${USER:-$(id -un)}.lock"
@@ -24,6 +25,12 @@ if [[ -L $target ]]; then
   say "Unlinked $target"
 elif [[ -e $target ]]; then
   warn "$target is a real directory; leaving it alone."
+fi
+
+# The glow copy install.sh made; the .example it came from stays.
+if [[ -f $SOURCE_DIR/hyprland.lua && -f $SOURCE_DIR/hyprland.lua.example ]]; then
+  rm -f "$SOURCE_DIR/hyprland.lua"
+  say "Removed the generated hyprland.lua"
 fi
 
 lock_dir="$PLUGINS_DIR/$LOCK_ID"

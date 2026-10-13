@@ -51,6 +51,16 @@ fi
 ln -nsf "$SOURCE_DIR" "$target"
 say "Linked $target -> $SOURCE_DIR"
 
+# The focused-window glow. Omarchy drops every *.lua from a theme installed out
+# of a git clone and regenerates it from colors.toml, so the repo ships this as
+# hyprland.lua.example and nothing is promised to those installs. A linked theme
+# is treated as the user's own, where the file is kept and does load — so put it
+# in place here. The copy is gitignored.
+if [[ -f $SOURCE_DIR/hyprland.lua.example && ! -f $SOURCE_DIR/hyprland.lua ]]; then
+  cp "$SOURCE_DIR/hyprland.lua.example" "$SOURCE_DIR/hyprland.lua"
+  say "Enabled the focused-window glow (hyprland.lua)"
+fi
+
 if [[ ! -d $SOURCE_DIR/backgrounds ]] || ! compgen -G "$SOURCE_DIR/backgrounds/*.png" >/dev/null; then
   warn "No wallpapers found. Generating them now."
   python3 -I "$SOURCE_DIR/tools/gen_backgrounds.py"
