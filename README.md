@@ -16,14 +16,14 @@ leave alone, each optional and each covered below.
 |---|---|
 | **Palette and gradient borders** | windows, bar, popups and the lock field, all from `colors.toml`. The only part `omarchy theme install` delivers on its own. |
 | **Six wallpapers** | generated, not hand-drawn; reproducible with a seed. |
-| **Four animated unlock screens** | the characters move behind the password field — a work crew, a saucer abducting a beetle, a cat and lamb and devil, a snake out of a wormhole. One at random per lock. Needs `install.sh`. |
+| **Four animated unlock screens** | the characters move behind the password field — a work crew, a saucer abducting a beetle, a cat and lamb and devil, a snake out of a wormhole. One at random per lock. Needs `tools/install.sh`. |
 | **Boot and login screen** | the lattice on the Plymouth splash and the SDDM greeter, via `omarchy plymouth switcher`. |
 | **GTK apps that match** | Nautilus and friends on the theme's background, in the bar's font, with smaller icons. Two scripts in `tools/`, one installable as a hook so it follows every theme. |
 | **Browsers** | `tools/browser-theme.sh` handles all three families: Chromium and Brave are already automatic, Firefox-likes get a static theme, Zen gets its own colours. |
 
 The unlock screens and the GTK scripts are **not** theme content — Omarchy has
 no way for a theme to deliver either. They live here so they are reproducible,
-and `install.sh` wires up the first. Nothing here is required: the palette
+and `tools/install.sh` wires up the first. Nothing here is required: the palette
 stands on its own.
 
 ## Install
@@ -39,13 +39,13 @@ whole thing clone and run the installer instead:
 ```bash
 git clone https://github.com/egulay/neon-foundry
 cd neon-foundry
-./install.sh
+./tools/install.sh
 ```
 
-`install.sh` links the repo into `~/.config/omarchy/themes/neon-foundry`, so
+`tools/install.sh` links the repo into `~/.config/omarchy/themes/neon-foundry`, so
 editing it here updates the installed theme in place. Options:
 `--theme-only` (skip the unlock screens), `--no-apply` (install without
-switching). `./uninstall.sh` reverses it and restores the stock unlock screen.
+switching). `./tools/uninstall.sh` reverses it and restores the stock unlock screen.
 
 ## The palette
 
@@ -89,7 +89,7 @@ It ships with the `.example` suffix deliberately. Omarchy drops every `*.lua`
 from a theme installed out of a git clone — a theme's `hyprland.lua` is loaded
 at login, and a theme is not allowed to ship code — so a file named
 `hyprland.lua` here would do nothing for anyone who ran `omarchy theme install`
-while appearing to work for whoever wrote it. `install.sh` copies it into place
+while appearing to work for whoever wrote it. `tools/install.sh` copies it into place
 for a linked install, where Omarchy treats the theme as the user's own and does
 load it; that copy is gitignored. **The gradient border does not depend on any
 of this** — it lives in `colors.toml` and reaches every install.
@@ -169,7 +169,7 @@ FoundryScene {
 
 Omarchy's lock screen is **not hyprlock** — it is the Quickshell plugin
 `omarchy.lock`. (The `unlock.png` that stock themes still ship is a dead
-legacy asset; nothing reads it.) `install.sh` clones that plugin to
+legacy asset; nothing reads it.) `tools/install.sh` clones that plugin to
 `~/.config/omarchy/plugins/<user>.lock` and replaces one file, `LockView.qml`,
 between two marked comment blocks.
 
@@ -192,7 +192,7 @@ To make the blank delay longer, raise that `interval` in your own clone's
 If you edit a scene by hand, run `omarchy restart shell` afterwards. Saving a
 file under `~/.config/omarchy/plugins/` reloads the plugin's service code, but
 the `LockView` the shell already built stays cached: the lock screen goes on
-rendering the previous view and reports no error at all. `install.sh` restarts
+rendering the previous view and reports no error at all. `tools/install.sh` restarts
 the shell for this reason.
 
 If Omarchy's own `LockView.qml` gains features, re-clone it and re-apply that
@@ -359,7 +359,13 @@ lock/                the unlock screens
   FoundryGrid.qml    the grid they move on
   FoundrySprites.js  every sprite matrix, and the curve helpers
   Scene*.qml         the four scenes
-tools/               wallpaper and login-asset generators, GTK and browser
+tools/               install/uninstall, and the generators
+  install.sh         link the theme, set up the unlock screens
+  uninstall.sh       reverse it
+  gen_backgrounds.py wallpapers
+  gen_logo.py        boot/login assets
+  gtk-*.sh           GTK font and colours
+  browser-theme.sh   browsers
 ```
 
 `btop.theme`, `neovim.lua`, the terminal configs and the rest are not shipped

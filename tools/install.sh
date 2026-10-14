@@ -13,7 +13,9 @@ set -euo pipefail
 
 THEME_NAME="neon-foundry"
 THEME_DISPLAY="Neon Foundry"
-SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# The repository root: this script lives in tools/, so the theme files that
+# Omarchy actually reads are one level up.
+SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 THEMES_DIR="$HOME/.config/omarchy/themes"
 PLUGINS_DIR="$HOME/.config/omarchy/plugins"
 LOCK_ID="${USER:-$(id -un)}.lock"
