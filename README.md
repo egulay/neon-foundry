@@ -18,9 +18,10 @@ screen. Omarchy's gallery lists repositories that carry no code, so everything
 that runs lives in a repository of its own:
 
 **[neon-foundry-tools](https://github.com/egulay/neon-foundry-tools)** — four
-animated unlock screens, the generators behind the wallpapers and the boot
-screen, and scripts that put GTK apps and browsers on the theme's colours. Its
-`./install.sh` sets up the theme and the unlock screens together.
+animated unlock screens, the focused-window glow, the generators behind the
+wallpapers and the boot screen, and scripts that put GTK apps and browsers on
+the theme's colours. Its
+`./install.sh` sets up the theme, the glow and the unlock screens together.
 
 ## The palette
 
@@ -56,16 +57,9 @@ palette is the form that survives `omarchy theme install`. The same value feeds
 the shell, which is what puts the gradient on the bar's popups and on the lock
 screen's password field.
 
-`hyprland.lua.example` carries the one thing no template can express: a glow
-under the focused window, with the border's three stops on the same 45-degree
-sweep, so the corner that is magenta on the border is magenta underneath it too.
-
-It ships with the `.example` suffix deliberately: named `hyprland.lua` it would
-do nothing for anyone who ran `omarchy theme install`, while appearing to work
-for whoever wrote it. The `install.sh` in neon-foundry-tools copies it into
-place for a linked theme, where Omarchy treats the theme as the user's own and
-does load it; that copy is ignored by git here. **The gradient border does not
-depend on any of this** — it lives in `colors.toml` and reaches every install.
+The glow under the focused window, in the border's three colours, is Hyprland
+Lua, so it lives in neon-foundry-tools with the rest of the code. The gradient
+border does not depend on it.
 
 ## Wallpapers
 
@@ -127,7 +121,6 @@ lock screen.
 
 ```
 colors.toml          the palette, and the gradient borders
-hyprland.lua.example focused-window glow; neon-foundry-tools puts it in place
 icons.theme          Yaru-olive
 chromium.theme       6,7,9
 backgrounds/         six wallpapers
